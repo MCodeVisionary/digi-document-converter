@@ -11,14 +11,15 @@ permissions:
 
 env:
   JF_URL: https://mcodevisionaryorg.jfrog.io
-  NUGET_REPO:   digi-nuget-dev-local
-  DOCKER_REPO:  digi-docker-dev-local
-  HELM_REPO:    digi-helm-dev-local
-  GENERIC_REPO: digi-generic-dev-local
-  APP_KEY: docportal
-  PROJECT_KEY: digitalization
-  IMAGE_NAME: digi-document-converter
-  PKG_ID: Digi.DocumentConverter.Core
+  NUGET_RESOLVE_REPO: docportal-doc-converter-nuget-dev-virtual
+  NUGET_DEPLOY_REPO:  docportal-doc-converter-nuget-dev-local
+  DOCKER_REPO:        docportal-doc-converter-docker-dev-local
+  HELM_REPO:          docportal-doc-converter-helm-dev-local
+  GENERIC_REPO:       docportal-doc-converter-generic-dev-local
+  APP_KEY:            docportal
+  PROJECT_KEY:        docportal
+  IMAGE_NAME:         digi-document-converter
+  PKG_ID:             Digi.DocumentConverter.Core
   EVIDENCE_KEY_ALIAS: docportal-evidence-key
 
 jobs:
@@ -39,7 +40,7 @@ jobs:
           JF_OIDC_PROVIDER_NAME: github-docportal
 
       - name: Configure NuGet resolution from JFrog
-        run: jf dotnetc --repo-resolve "$NUGET_REPO" --project "$PROJECT_KEY"
+        run: jf dotnetc --repo-resolve "$NUGET_RESOLVE_REPO" --project "$PROJECT_KEY"
 
       - name: Restore & build
         run: |
@@ -98,7 +99,7 @@ jobs:
         run: |
           dotnet pack src/DigiDocumentConverter.Core/DigiDocumentConverter.Core.csproj \
             -c Release -p:Version="$VERSION" -o ./nupkg
-          jf rt upload "nupkg/*.nupkg" "$NUGET_REPO/" \
+          jf rt upload "nupkg/*.nupkg" "$NUGET_DEPLOY_REPO/" \
             --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
 
       - name: Build & push Docker image
@@ -138,7 +139,7 @@ jobs:
         run: |
           echo "{ \"actor\": \"${{ github.actor }}\", \"date\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" }" > nuget-sig.json
           jf evd create \
-            --package-name "$PKG_ID" --package-version "$VERSION" --package-repo-name "$NUGET_REPO" \
+            --package-name "$PKG_ID" --package-version "$VERSION" --package-repo-name "$NUGET_DEPLOY_REPO" \
             --predicate nuget-sig.json \
             --predicate-type "https://jfrog.com/evidence/signature/v1" \
             --key "${{ secrets.EVIDENCE_PRIVATE_KEY }}" --key-alias "$EVIDENCE_KEY_ALIAS"
