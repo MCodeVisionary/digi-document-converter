@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- This project is published as a NuGet package to digi-nuget-dev-local -->
+    <PackageId>Digi.DocumentConverter.Core</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>DocPortal Team</Authors>
+    <Description>Converts documents to PDF, Word (docx) or JSON for the Digitalization project.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="QuestPDF" Version="2024.7.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2" />
+  </ItemGroup>
+</Project>

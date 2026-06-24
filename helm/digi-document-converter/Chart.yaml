@@ -1,0 +1,6 @@
+apiVersion: v2
+name: digi-document-converter
+description: Digitalization document converter (PDF / Word / JSON)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

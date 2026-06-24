@@ -1,0 +1,13 @@
+replicaCount: 2
+image:
+  repository: mcodevisionaryorg.jfrog.io/digi-docker/digi-document-converter
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+imagePullSecrets:
+  - name: jfrog-docker-pull
+service:
+  type: ClusterIP
+  port: 8080
+resources:
+  requests: { cpu: 100m, memory: 256Mi }
+  limits: { cpu: "1", memory: 512Mi }

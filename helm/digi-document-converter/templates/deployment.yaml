@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dc.name" . }}
+  labels: {{- include "dc.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "dc.name" . }}
+  template:
+    metadata:
+      labels: {{- include "dc.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets: {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      containers:
+        - name: api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports: [{ containerPort: {{ .Values.service.port }} }]
+          readinessProbe:
+            httpGet: { path: /health, port: {{ .Values.service.port }} }
+          livenessProbe:
+            httpGet: { path: /health, port: {{ .Values.service.port }} }
+          resources: {{- toYaml .Values.resources | nindent 12 }}
