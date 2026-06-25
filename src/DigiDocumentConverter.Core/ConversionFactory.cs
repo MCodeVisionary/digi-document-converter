@@ -1,19 +1,43 @@
+using Microsoft.Extensions.Logging;
+
 namespace DigiDocumentConverter.Core;
 
 public class ConversionFactory : IConversionFactory
 {
     private readonly Dictionary<TargetFormat, IConverter> _converters;
+    private readonly ILogger<ConversionFactory> _logger;
 
-    public ConversionFactory()
+    public ConversionFactory(ILogger<ConversionFactory> logger)
     {
+        _logger = logger;
         _converters = new IConverter[] { new PdfConverter(), new WordConverter(), new JsonConverter() }
             .ToDictionary(c => c.Format);
+        _logger.LogDebug("ConversionFactory initialised with formats: {Formats}",
+            string.Join(", ", _converters.Keys));
     }
 
-    public IConverter For(TargetFormat format) =>
-        _converters.TryGetValue(format, out var c)
-            ? c : throw new NotSupportedException($"No converter for {format}");
+    public IConverter For(TargetFormat format)
+    {
+        if (_converters.TryGetValue(format, out var c))
+            return c;
+        throw new NotSupportedException($"No converter registered for format '{format}'.");
+    }
 
-    public ConversionResult Convert(ConversionInput input, TargetFormat format) =>
-        For(format).Convert(input);
+    public ConversionResult Convert(ConversionInput input, TargetFormat format)
+    {
+        _logger.LogDebug("Converting {Filename} to {Format}", input.Filename, format);
+        try
+        {
+            var result = For(format).Convert(input);
+            _logger.LogDebug("Converted {Filename} → {Output} ({Bytes} bytes)",
+                input.Filename, result.Filename, result.Content.Length);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Converter for {Format} threw while processing {Filename}",
+                format, input.Filename);
+            throw;
+        }
+    }
 }
