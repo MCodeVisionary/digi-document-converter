@@ -124,6 +124,9 @@ jobs:
           jf rt upload "nupkg/*.nupkg" "$NUGET_REPO/" \
             --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
 
+      - name: Docker login to JFrog registry
+        run: jf docker login "${JF_URL#https://}"
+
       - name: Build & push Docker image
         run: |
           docker build -t "${JF_URL#https://}/$DOCKER_REPO/$IMAGE_NAME:$VERSION" \
