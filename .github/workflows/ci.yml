@@ -152,7 +152,7 @@ jobs:
             --flat=false --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
 
       - name: Publish build-info
-        run: jf rt build-publish "$IMAGE_NAME" "${{ github.run_number }}"
+        run: jf rt build-publish "$IMAGE_NAME" "${{ github.run_number }}" --project "$PROJECT_KEY"
 
       # ---------- EVIDENCE ----------
       # test results on the docker image
