@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DigiDocumentConverter.Core;
 
@@ -7,9 +8,9 @@ public class ConversionFactory : IConversionFactory
     private readonly Dictionary<TargetFormat, IConverter> _converters;
     private readonly ILogger<ConversionFactory> _logger;
 
-    public ConversionFactory(ILogger<ConversionFactory> logger)
+    public ConversionFactory(ILogger<ConversionFactory>? logger = null)
     {
-        _logger = logger;
+        _logger = logger ?? NullLogger<ConversionFactory>.Instance;
         _converters = new IConverter[] { new PdfConverter(), new WordConverter(), new JsonConverter() }
             .ToDictionary(c => c.Format);
         _logger.LogDebug("ConversionFactory initialised with formats: {Formats}",
