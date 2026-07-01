@@ -1,5 +1,7 @@
 # digi-document-converter
 
+> Release bundles promoted to DEV lifecycle stage via `jf rbp`.
+
 Converts an inputted document to **PDF**, **Word (.docx)**, or **JSON** for the
 **Digitalization** project. Part of the **DocPortal** AppTrust application.
 
