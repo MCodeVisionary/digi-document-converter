@@ -134,7 +134,8 @@ jobs:
           dotnet pack src/DigiDocumentConverter.Core/DigiDocumentConverter.Core.csproj \
             -c Release -p:Version="$VERSION" -o ./nupkg
           jf rt upload "nupkg/*.nupkg" "$NUGET_LOCAL_REPO/" \
-            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
+            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}" \
+            --module "$PKG_ID"
 
       - name: Provenance — NuGet package
         run: |
@@ -189,7 +190,8 @@ jobs:
         run: |
           helm package helm/digi-document-converter --version "$VERSION" --app-version "$VERSION"
           jf rt upload "digi-document-converter-${VERSION}.tgz" "$HELM_LOCAL_REPO/" \
-            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
+            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}" \
+            --module "$IMAGE_NAME-helm"
 
       - name: Provenance — Helm chart
         run: |
