@@ -32,7 +32,7 @@ env:
 
 jobs:
   build-test-publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       JFROG_CLI_LOG_LEVEL:          ${{ inputs.debug && 'DEBUG' || 'INFO' }}
       DOTNET_VERBOSITY:             ${{ inputs.debug && 'diagnostic' || 'minimal' }}
