@@ -135,6 +135,7 @@ jobs:
             -c Release -p:Version="$VERSION" -o ./nupkg
           jf nugetc --repo-resolve "$NUGET_LOCAL_REPO" --server-id-resolve "$SETUP_JFROG_CLI_SERVER_IDS"
           jf nuget push "nupkg/${PKG_ID}.${VERSION}.nupkg" \
+            -Source "${JF_URL}/artifactory/api/nuget/v3/${NUGET_LOCAL_REPO}/" \
             --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
 
       - name: Provenance — NuGet package
