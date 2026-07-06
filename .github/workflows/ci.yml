@@ -32,7 +32,7 @@ env:
 
 jobs:
   build-test-publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       JFROG_CLI_LOG_LEVEL:          ${{ inputs.debug && 'DEBUG' || 'INFO' }}
       DOTNET_VERBOSITY:             ${{ inputs.debug && 'diagnostic' || 'minimal' }}
@@ -133,10 +133,9 @@ jobs:
         run: |
           dotnet pack src/DigiDocumentConverter.Core/DigiDocumentConverter.Core.csproj \
             -c Release -p:Version="$VERSION" -o ./nupkg
-          jf nugetc --repo-resolve "$NUGET_LOCAL_REPO" --server-id-resolve "$SETUP_JFROG_CLI_SERVER_IDS"
-          jf nuget push "nupkg/${PKG_ID}.${VERSION}.nupkg" \
-            -Source "${JF_URL}/artifactory/api/nuget/v3/${NUGET_LOCAL_REPO}/" \
-            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
+          jf rt upload "nupkg/*.nupkg" "$NUGET_LOCAL_REPO/" \
+            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}" \
+            --module "$PKG_ID"
 
       - name: Provenance — NuGet package
         run: |
