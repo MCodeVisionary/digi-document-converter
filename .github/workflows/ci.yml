@@ -133,9 +133,9 @@ jobs:
         run: |
           dotnet pack src/DigiDocumentConverter.Core/DigiDocumentConverter.Core.csproj \
             -c Release -p:Version="$VERSION" -o ./nupkg
-          jf rt upload "nupkg/*.nupkg" "$NUGET_LOCAL_REPO/" \
-            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}" \
-            --module "$PKG_ID"
+          jf nugetc --repo-resolve "$NUGET_LOCAL_REPO" --server-id-resolve "$SETUP_JFROG_CLI_SERVER_IDS"
+          jf nuget push "nupkg/${PKG_ID}.${VERSION}.nupkg" \
+            --build-name "$IMAGE_NAME" --build-number "${{ github.run_number }}"
 
       - name: Provenance — NuGet package
         run: |
