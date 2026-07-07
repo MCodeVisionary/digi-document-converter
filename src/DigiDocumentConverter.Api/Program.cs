@@ -10,7 +10,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.Logger.LogInformation("Hello World from digi-document-converter v0.1.38");
+app.Logger.LogInformation("Hello World from digi-document-converter v0.1.39");
 
 app.UseExceptionHandler(errApp =>
 {
