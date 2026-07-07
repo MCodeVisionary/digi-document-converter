@@ -35,6 +35,11 @@
         "resolved": "2.8.1",
         "contentHash": "qBTK0WAcnw65mymIjVDqWUTdqjMyzjwu9e9SF0oGYfYELgbcteDZ4fQLJaXw8mzkvpAD7YdoexBbg8VYQFkWWA=="
       },
+      "DiffPlex": {
+        "type": "Transitive",
+        "resolved": "1.7.2",
+        "contentHash": "qJEjdxEDBWSFZGB8paBB9HDeJXHGlHlOXeGX3kbTuXWuOsgv2iSAEOOzo5V1/B39Vcxr9IVVrNKewRcX+rsn4g=="
+      },
       "DocumentFormat.OpenXml": {
         "type": "Transitive",
         "resolved": "3.0.2",
@@ -149,6 +154,7 @@
       "Digi.DocumentConverter.Core": {
         "type": "Project",
         "dependencies": {
+          "DiffPlex": "[1.7.2, )",
           "DocumentFormat.OpenXml": "[3.0.2, )",
           "Microsoft.Extensions.Logging.Abstractions": "[8.0.0, )",
           "QuestPDF": "[2024.7.0, )"
