@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IConversionFactory, ConversionFactory>();
+builder.Services.AddSingleton<IDocumentDiffer, DocumentDiffer>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.Logger.LogInformation("Hello World from digi-document-converter v0.1.37");
+app.Logger.LogInformation("Hello World from digi-document-converter v0.1.38");
 
 app.UseExceptionHandler(errApp =>
 {

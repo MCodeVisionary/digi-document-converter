@@ -36,4 +36,23 @@ public class ConvertApiTests : IClassFixture<WebApplicationFactory<Program>>
         });
         Assert.Equal(HttpStatusCode.UnprocessableEntity, resp.StatusCode);
     }
+
+    [Fact]
+    public async Task Diff_returns_json_with_change_counts()
+    {
+        var resp = await _client.PostAsJsonAsync("/api/diff", new
+        {
+            filenameV1 = "v1.txt",
+            filenameV2 = "v2.txt",
+            textV1 = "line one\nline two",
+            textV2 = "line one\nline three"
+        });
+        Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+        Assert.Equal("application/json", resp.Content.Headers.ContentType!.MediaType);
+
+        var body = await resp.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
+        Assert.True(body.GetProperty("insertedLines").GetInt32() >= 0);
+        Assert.True(body.GetProperty("deletedLines").GetInt32() >= 0);
+        Assert.True(body.GetProperty("lines").GetArrayLength() > 0);
+    }
 }
